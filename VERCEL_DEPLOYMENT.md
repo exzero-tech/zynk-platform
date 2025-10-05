@@ -1,54 +1,48 @@
-# Vercel Deployment Guide
+# Vercel Deployment Guide - URGENT FIX NEEDED
 
-## Current Issue: 404 NOT_FOUND
+## Current Issue: 404 NOT_FOUND + Build Error
 
-Your Vercel deployment is returning 404 because it's trying to deploy from the repository root instead of the `frontend` folder.
+Your Vercel deployment is failing because:
+1. Vercel is building from repository root (not the frontend folder)
+2. The command `cd frontend && npm install` fails because there's no frontend directory in the root context
 
-## Solution Options
+## IMMEDIATE SOLUTION
 
-### Option 1: Set Root Directory in Vercel Dashboard (Recommended)
+### Step 1: Set Root Directory in Vercel (REQUIRED)
 1. Go to your Vercel dashboard: https://vercel.com/dashboard
-2. Select your `zynk-platform` project
+2. Select your `zynk-platform` project  
 3. Go to **Settings** → **General**
 4. Find **Root Directory** section
-5. Set it to: `frontend`
-6. Click **Save**
-7. Trigger a new deployment
+5. **CHANGE FROM:** `.` (current)
+6. **CHANGE TO:** `frontend`
+7. Click **Save**
 
-### Option 2: Use the vercel.json Configuration
-The repository now has a `vercel.json` at the root that tells Vercel:
-- Build command: `cd frontend && npm run build`
-- Install command: `cd frontend && npm install`
-- Output directory: `frontend/.next`
+### Step 2: Remove Custom Commands (Done)
+The vercel.json now uses simple Next.js detection instead of custom commands.
 
-## Verification Steps
+### Step 3: Redeploy
+After changing the Root Directory, trigger a new deployment:
+- Push a small commit, OR
+- Go to Deployments tab and click "Redeploy"
 
-After deployment:
-1. Visit your deployed URL
-2. Check the health endpoint: `https://your-app.vercel.app/api/health`
-3. If you see `{"status":"ok","now":"..."}`, the deployment is working
+## Why This Fixes It
 
-## Troubleshooting
+Setting Root Directory to `frontend` tells Vercel:
+- Build context: `/frontend` folder (where package.json, src/, etc. are)
+- Install command: `npm install` (no need for `cd frontend`)
+- Build command: `npm run build` (runs in frontend context)
+- Output: `.next` folder (relative to frontend)
 
-If you still get 404:
-1. Check Vercel build logs for errors
-2. Ensure the Root Directory is set to `frontend`
-3. Verify the build completed successfully
-4. Make sure no custom domains are misconfigured
+## Verification After Fix
 
-## Quick Test
-To test locally:
-```bash
-cd frontend
-npm install
-npm run build
-npm start
+Once deployed correctly:
+- Main site: `https://your-app.vercel.app/` → Should show Next.js welcome page
+- Health check: `https://your-app.vercel.app/api/health` → Should return JSON
+
+## Current Build Log Error Explained
+```
+Running "install" command: `cd frontend && npm install`...
+sh: line 1: cd: frontend: No such file or directory
 ```
 
-Then visit http://localhost:3000 and http://localhost:3000/api/health
-
-## Common Vercel Deployment Issues
-- Root Directory not set correctly
-- Build command fails (check logs)
-- Environment variables missing
-- Custom domain DNS issues
+This happens because Vercel is executing from repository root where there's no `frontend` folder - only when Root Directory is set to `frontend` will it execute commands from the correct location.
