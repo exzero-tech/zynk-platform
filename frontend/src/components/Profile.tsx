@@ -3,7 +3,7 @@ import Image from "next/image"
 export default function Profile() {
   return (
     <div className="flex items-center gap-3">
-      <div className="w-12 h-12 rounded-full overflow-hidden">
+      <div className="w-[52px] h-[52px] rounded-full overflow-hidden">
         <Image
           src="/harith-danushka-profile-pic.webp"
           alt="Haritha Danushka"
