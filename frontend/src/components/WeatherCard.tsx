@@ -7,8 +7,8 @@ export default function WeatherCard() {
         <Image src="/sunny.png" alt="Sunny" width={80} height={80} />
       </div>
       <div className="text-left ml-1 flex-1">
-        <div className="text-white text-3xl font-bold">28°C</div>
-        <div className="text-text-secondary text-base">Colombo</div>
+        <div className="text-white text-2xl font-bold">28°C</div>
+        <div className="text-text-secondary text-sm">Colombo</div>
       </div>
     </div>
   )
