@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 
 // Dynamically import the map component to avoid SSR issues
-const DynamicMap = dynamic(() => import('./DynamicMap'), {
+const DynamicMap = dynamic(() => import('@/components/DynamicMap'), {
   ssr: false,
   loading: () => (
     <div className="bg-foreground rounded-2xl p-0 overflow-hidden h-48 relative flex items-center justify-center">
