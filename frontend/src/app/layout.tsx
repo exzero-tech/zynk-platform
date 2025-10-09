@@ -11,6 +11,26 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Zynk | Charge. Connect. Go. ",
   description: "All in one place for EV owners in Sri Lanka",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Zynk",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Zynk",
+    title: "Zynk | Charge. Connect. Go.",
+    description: "All in one place for EV owners in Sri Lanka",
+  },
+  twitter: {
+    card: "summary",
+    title: "Zynk | Charge. Connect. Go.",
+    description: "All in one place for EV owners in Sri Lanka",
+  },
 };
 
 export const viewport: Viewport = {
@@ -18,6 +38,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -27,6 +48,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* iOS PWA Meta Tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Zynk" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#00BC74" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/icon-192x192.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.svg" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body
         className={`${inter.variable} antialiased`}
       >
