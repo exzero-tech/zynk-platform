@@ -11,9 +11,9 @@ export default function Last30DaysStats() {
         </div>
 
         {/* Total Spending */}
-        <div className="flex-1 bg-black/20 rounded-xl p-4">
+        <div className="flex-[1.2] bg-black/20 rounded-xl p-4">
           <div className="text-text-secondary text-sm mb-1">Total spending</div>
-          <div className="text-white font-bold text-xl">LKR18,558.43</div>
+          <div className="text-white font-bold text-xl whitespace-nowrap">LKR 18,558.43</div>
         </div>
       </div>
     </div>
