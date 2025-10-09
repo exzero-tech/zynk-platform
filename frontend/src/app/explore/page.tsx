@@ -17,10 +17,10 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({
-    availability: 'all', // 'all', 'available', 'in-use'
-    chargerType: 'all', // 'all', 'ccs2'
-    chargerSpeed: 'all', // 'all', 'slow', 'medium', 'fast'
-    maxDistance: 10 // km
+    status: 'all', // 'all', 'available', 'in-use', 'offline', 'maintenance'
+    connectorType: 'all', // 'all', 'type1', 'type2', 'ccs2', 'chademo', 'byoc'
+    chargingSpeed: 'all', // 'all', 'slow', 'fast', 'rapid', 'ultra-fast'
+    pricePerKwh: 'all' // 'all', 'budget', 'standard', 'premium'
   })
 
   const handleSearch = () => {
@@ -89,47 +89,53 @@ export default function ExplorePage() {
 
             {/* Filter Options */}
             <div className="flex-1 space-y-6">
-              {/* Availability Filter */}
+              {/* Availability Status Filter */}
               <div>
-                <label className="text-white/70 text-sm block mb-3">Availability</label>
+                <label className="text-white/70 text-sm block mb-3">Availability Status</label>
                 <select
-                  value={filters.availability}
-                  onChange={(e) => updateFilter('availability', e.target.value)}
+                  value={filters.status}
+                  onChange={(e) => updateFilter('status', e.target.value)}
                   className="w-full bg-white/10 text-white rounded-lg px-4 py-3 outline-none text-base"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     color: 'white'
                   }}
                 >
-                  <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Stations</option>
-                  <option value="available" style={{ backgroundColor: '#242424', color: 'white' }}>Available Only</option>
-                  <option value="in-use" style={{ backgroundColor: '#242424', color: 'white' }}>In Use Only</option>
+                  <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Statuses</option>
+                  <option value="available" style={{ backgroundColor: '#242424', color: 'white' }}>Available</option>
+                  <option value="in-use" style={{ backgroundColor: '#242424', color: 'white' }}>In Use</option>
+                  <option value="offline" style={{ backgroundColor: '#242424', color: 'white' }}>Offline</option>
+                  <option value="maintenance" style={{ backgroundColor: '#242424', color: 'white' }}>Under Maintenance</option>
                 </select>
               </div>
 
-              {/* Charger Type Filter */}
+              {/* Connector Type Filter */}
               <div>
-                <label className="text-white/70 text-sm block mb-3">Charger Type</label>
+                <label className="text-white/70 text-sm block mb-3">Connector Type</label>
                 <select
-                  value={filters.chargerType}
-                  onChange={(e) => updateFilter('chargerType', e.target.value)}
+                  value={filters.connectorType}
+                  onChange={(e) => updateFilter('connectorType', e.target.value)}
                   className="w-full bg-white/10 text-white rounded-lg px-4 py-3 outline-none text-base"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                     color: 'white'
                   }}
                 >
-                  <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Types</option>
-                  <option value="ccs2" style={{ backgroundColor: '#242424', color: 'white' }}>CCS2</option>
+                  <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Connectors</option>
+                  <option value="type1" style={{ backgroundColor: '#242424', color: 'white' }}>Type 1</option>
+                  <option value="type2" style={{ backgroundColor: '#242424', color: 'white' }}>Type 2</option>
+                  <option value="ccs2" style={{ backgroundColor: '#242424', color: 'white' }}>CCS 2</option>
+                  <option value="chademo" style={{ backgroundColor: '#242424', color: 'white' }}>CHAdeMO</option>
+                  <option value="byoc" style={{ backgroundColor: '#242424', color: 'white' }}>BYOC - Bring Your Own Charger</option>
                 </select>
               </div>
 
-              {/* Charger Speed Filter */}
+              {/* Charging Speed Filter */}
               <div>
-                <label className="text-white/70 text-sm block mb-3">Charger Speed</label>
+                <label className="text-white/70 text-sm block mb-3">Charging Speed</label>
                 <select
-                  value={filters.chargerSpeed}
-                  onChange={(e) => updateFilter('chargerSpeed', e.target.value)}
+                  value={filters.chargingSpeed}
+                  onChange={(e) => updateFilter('chargingSpeed', e.target.value)}
                   className="w-full bg-white/10 text-white rounded-lg px-4 py-3 outline-none text-base"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -137,29 +143,32 @@ export default function ExplorePage() {
                   }}
                 >
                   <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Speeds</option>
-                  <option value="slow" style={{ backgroundColor: '#242424', color: 'white' }}>Slow (≤50 kW)</option>
-                  <option value="medium" style={{ backgroundColor: '#242424', color: 'white' }}>Medium (51-150 kW)</option>
-                  <option value="fast" style={{ backgroundColor: '#242424', color: 'white' }}>Fast (≥151 kW)</option>
+                  <option value="slow" style={{ backgroundColor: '#242424', color: 'white' }}>Slow (≤10 kW)</option>
+                  <option value="fast" style={{ backgroundColor: '#242424', color: 'white' }}>Fast (10-50 kW)</option>
+                  <option value="rapid" style={{ backgroundColor: '#242424', color: 'white' }}>Rapid (50-150 kW)</option>
+                  <option value="ultra-fast" style={{ backgroundColor: '#242424', color: 'white' }}>Ultra-fast (150+ kW)</option>
                 </select>
               </div>
 
-              {/* Distance Filter */}
+              {/* Price per kWh Filter */}
               <div>
-                <label className="text-white/70 text-sm block mb-3">Max Distance: {filters.maxDistance} km</label>
-                <input
-                  type="range"
-                  min="1"
-                  max="20"
-                  value={filters.maxDistance}
-                  onChange={(e) => updateFilter('maxDistance', parseInt(e.target.value))}
-                  className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
-                  style={{ accentColor: '#00BC74' }}
-                />
-                <div className="flex justify-between text-white/60 text-xs mt-2">
-                  <span>1 km</span>
-                  <span>20 km</span>
-                </div>
+                <label className="text-white/70 text-sm block mb-3">Price per kWh</label>
+                <select
+                  value={filters.pricePerKwh}
+                  onChange={(e) => updateFilter('pricePerKwh', e.target.value)}
+                  className="w-full bg-white/10 text-white rounded-lg px-4 py-3 outline-none text-base"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    color: 'white'
+                  }}
+                >
+                  <option value="all" style={{ backgroundColor: '#242424', color: 'white' }}>All Prices</option>
+                  <option value="budget" style={{ backgroundColor: '#242424', color: 'white' }}>Budget (&lt; LKR 45)</option>
+                  <option value="standard" style={{ backgroundColor: '#242424', color: 'white' }}>Standard (LKR 45-50)</option>
+                  <option value="premium" style={{ backgroundColor: '#242424', color: 'white' }}>Premium (&gt; LKR 50)</option>
+                </select>
               </div>
+
             </div>
 
             {/* Apply Button */}

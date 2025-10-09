@@ -7,10 +7,10 @@ import ChargingStationBottomSheet from './ChargingStationBottomSheet'
 interface ExploreMapProps {
   searchTerm?: string
   filters?: {
-    availability: string
-    chargerType: string
-    chargerSpeed: string
-    maxDistance: number
+    status: string
+    connectorType: string
+    chargingSpeed: string
+    pricePerKwh: string
   }
 }
 
@@ -44,11 +44,13 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'Kelaniya Central Hub', 
       status: 'Available', 
       distance: '1.2 km', 
-      chargerType: 'CCS2',
+      connectorType: 'ccs2',
       location: 'Kelaniya, Sri Lanka',
       pricePerKwh: 'LKR 45',
       host: 'CEB',
       chargerSpeed: '150 kW',
+      chargingSpeed: 'ultra-fast',
+      priceCategory: 'standard',
       byocSupport: true
     },
     { 
@@ -56,11 +58,13 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'Highway Charge Point', 
       status: 'Available', 
       distance: '1.8 km', 
-      chargerType: 'CCS2',
+      connectorType: 'ccs2',
       location: 'Colombo-Kandy Highway, Sri Lanka',
       pricePerKwh: 'LKR 50',
       host: 'Lanka Electricity',
       chargerSpeed: '100 kW',
+      chargingSpeed: 'rapid',
+      priceCategory: 'standard',
       byocSupport: false
     },
     { 
@@ -68,11 +72,13 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'EcoStation Kelaniya', 
       status: 'In Use', 
       distance: '2.5 km', 
-      chargerType: 'CCS2',
+      connectorType: 'type2',
       location: 'Dalugama, Sri Lanka',
       pricePerKwh: 'LKR 42',
       host: 'GreenCharge Lanka',
-      chargerSpeed: '75 kW',
+      chargerSpeed: '22 kW',
+      chargingSpeed: 'fast',
+      priceCategory: 'budget',
       byocSupport: true
     },
     { 
@@ -80,23 +86,27 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'GreenPower Station', 
       status: 'Available', 
       distance: '2.8 km', 
-      chargerType: 'CCS2',
+      connectorType: 'ccs2',
       location: 'Kadawatha, Sri Lanka',
       pricePerKwh: 'LKR 48',
       host: 'Sustainable Energy',
       chargerSpeed: '125 kW',
+      chargingSpeed: 'rapid',
+      priceCategory: 'standard',
       byocSupport: true
     },
     { 
       position: [6.9900, 79.9150] as [number, number], 
       name: 'FastCharge Kelaniya', 
-      status: 'Available', 
+      status: 'Offline', 
       distance: '3.1 km', 
-      chargerType: 'CCS2',
+      connectorType: 'ccs2',
       location: 'Kelaniya North, Sri Lanka',
       pricePerKwh: 'LKR 52',
       host: 'FastCharge Networks',
       chargerSpeed: '200 kW',
+      chargingSpeed: 'ultra-fast',
+      priceCategory: 'premium',
       byocSupport: false
     },
     { 
@@ -104,23 +114,27 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'ElectroHub', 
       status: 'In Use', 
       distance: '3.5 km', 
-      chargerType: 'CCS2',
+      connectorType: 'chademo',
       location: 'Kiribathgoda, Sri Lanka',
       pricePerKwh: 'LKR 46',
       host: 'Electro Lanka',
       chargerSpeed: '90 kW',
+      chargingSpeed: 'rapid',
+      priceCategory: 'standard',
       byocSupport: true
     },
     { 
       position: [6.9750, 79.9050] as [number, number], 
       name: 'PowerPoint Station', 
-      status: 'Available', 
+      status: 'Under Maintenance', 
       distance: '3.8 km', 
-      chargerType: 'CCS2',
+      connectorType: 'type1',
       location: 'Wattala, Sri Lanka',
       pricePerKwh: 'LKR 44',
       host: 'PowerPoint EV',
-      chargerSpeed: '110 kW',
+      chargerSpeed: '7 kW',
+      chargingSpeed: 'slow',
+      priceCategory: 'budget',
       byocSupport: true
     },
     { 
@@ -128,11 +142,13 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       name: 'Volt Station', 
       status: 'Available', 
       distance: '4.2 km', 
-      chargerType: 'CCS2',
+      connectorType: 'byoc',
       location: 'Peliyagoda, Sri Lanka',
       pricePerKwh: 'LKR 49',
       host: 'Volt Lanka',
-      chargerSpeed: '180 kW',
+      chargerSpeed: '11 kW',
+      chargingSpeed: 'fast',
+      priceCategory: 'standard',
       byocSupport: false
     }
   ]
@@ -147,37 +163,34 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       filtered = filtered.filter(station => 
         station.name.toLowerCase().includes(term) ||
         station.location.toLowerCase().includes(term) ||
-        station.host.toLowerCase().includes(term) ||
-        station.chargerType.toLowerCase().includes(term)
+        station.host.toLowerCase().includes(term)
       )
     }
 
-    // Apply availability filter
-    if (filters?.availability && filters.availability !== 'all') {
+    // Apply status filter
+    if (filters?.status && filters.status !== 'all') {
       filtered = filtered.filter(station => {
-        if (filters.availability === 'available') return station.status === 'Available'
-        if (filters.availability === 'in-use') return station.status === 'In Use'
+        if (filters.status === 'available') return station.status === 'Available'
+        if (filters.status === 'in-use') return station.status === 'In Use'
+        if (filters.status === 'offline') return station.status === 'Offline'
+        if (filters.status === 'maintenance') return station.status === 'Under Maintenance'
         return true
       })
     }
 
-    // Apply charger speed filter
-    if (filters?.chargerSpeed && filters.chargerSpeed !== 'all') {
-      filtered = filtered.filter(station => {
-        const speed = parseInt(station.chargerSpeed.replace(' kW', ''))
-        if (filters.chargerSpeed === 'slow') return speed <= 50
-        if (filters.chargerSpeed === 'medium') return speed >= 51 && speed <= 150
-        if (filters.chargerSpeed === 'fast') return speed >= 151
-        return true
-      })
+    // Apply connector type filter
+    if (filters?.connectorType && filters.connectorType !== 'all') {
+      filtered = filtered.filter(station => station.connectorType === filters.connectorType)
     }
 
-    // Apply distance filter
-    if (filters?.maxDistance) {
-      filtered = filtered.filter(station => {
-        const distance = parseFloat(station.distance.replace(' km', ''))
-        return distance <= filters.maxDistance
-      })
+    // Apply charging speed filter
+    if (filters?.chargingSpeed && filters.chargingSpeed !== 'all') {
+      filtered = filtered.filter(station => station.chargingSpeed === filters.chargingSpeed)
+    }
+
+    // Apply price per kWh filter
+    if (filters?.pricePerKwh && filters.pricePerKwh !== 'all') {
+      filtered = filtered.filter(station => station.priceCategory === filters.pricePerKwh)
     }
 
     return filtered
