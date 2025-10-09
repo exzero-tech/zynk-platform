@@ -7,7 +7,7 @@ export default function BatteryCard() {
         {/* Battery Icon */}
         <svg width="170" height="100" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg" >
           {/* Range text */}
-          <text x="8" y="9" textAnchor="start" fill="white" fontSize="7">Left 120 KM</text>
+          <text x="8" y="9" textAnchor="start" fill="var(--text-secondary)" fontSize="8">Left 120 KM</text>
           {/* Battery body */}
           <rect x="8" y="13" width="60" height="20" rx="3" ry="3" fill="none" stroke="#00BC74" strokeWidth="1"/>
           {/* Battery terminal */}

@@ -14,7 +14,7 @@ export default function Profile() {
       </div>
       <div>
         <div className="text-white font-semibold">Haritha Danushka</div>
-        <div className="text-white text-xs flex items-center gap-1">
+        <div className="text-white text-base flex items-center gap-1">
           Good morning
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="5"/>

@@ -5,6 +5,7 @@
   --foreground: #242424;
   --white: #FFFFFF;
   --accent: #00BC74;
+  --text-secondary: #d4d4d8;
 }
 
 @theme inline {
@@ -12,6 +13,7 @@
   --color-foreground: var(--foreground);
   --color-white: var(--white);
   --color-accent: var(--accent);
+  --color-text-secondary: var(--text-secondary);
   --font-sans: var(--font-inter);
 }
 
