@@ -1,8 +1,12 @@
 import { MapContainer, TileLayer, Marker, CircleMarker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import ChargingStationBottomSheet from './ChargingStationBottomSheet'
+
+interface ExploreMapProps {
+  searchTerm: string
+}
 
 // Fix for default markers in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -21,14 +25,14 @@ const greyIcon = new L.Icon({
   shadowSize: [41, 41]
 })
 
-export default function ExploreMap() {
+export default function ExploreMap({ searchTerm }: ExploreMapProps) {
   const [selectedStation, setSelectedStation] = useState<any>(null)
 
   // University of Kelaniya coordinates (current location)
   const currentLocation: [number, number] = [6.9739, 79.9167]
 
   // Extended dummy EV charging stations data for explore page
-  const chargingStations = [
+  const allChargingStations = [
     { 
       position: [6.9800, 79.9200] as [number, number], 
       name: 'Kelaniya Central Hub', 
@@ -126,6 +130,21 @@ export default function ExploreMap() {
       byocSupport: false
     }
   ]
+
+  // Filter stations based on search term
+  const chargingStations = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return allChargingStations
+    }
+    
+    const term = searchTerm.toLowerCase()
+    return allChargingStations.filter(station => 
+      station.name.toLowerCase().includes(term) ||
+      station.location.toLowerCase().includes(term) ||
+      station.host.toLowerCase().includes(term) ||
+      station.chargerType.toLowerCase().includes(term)
+    )
+  }, [searchTerm])
 
   return (
     <>

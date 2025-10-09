@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 
 // Dynamically import the map component to avoid SSR issues
 const ExploreMap = dynamic(() => import('@/components/ExploreMap'), {
@@ -13,6 +14,14 @@ const ExploreMap = dynamic(() => import('@/components/ExploreMap'), {
 })
 
 export default function ExplorePage() {
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      console.log('Searching for:', searchTerm)
+    }
+  }
+
   return (
     <div className="h-screen w-full relative">
       {/* Search Bar */}
@@ -21,9 +30,14 @@ export default function ExplorePage() {
           <input
             type="text"
             placeholder="Search charging stations"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-1 bg-transparent outline-none text-white placeholder-white/60 text-base px-4 py-4"
           />
-          <button className="w-12 h-12 bg-accent hover:bg-accent/90 rounded-full flex items-center justify-center flex-shrink-0">
+          <button 
+            onClick={handleSearch}
+            className="w-12 h-12 bg-accent hover:bg-accent/90 rounded-full flex items-center justify-center flex-shrink-0"
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
               <circle cx="11" cy="11" r="8"/>
               <path d="m21 21-4.35-4.35"/>
@@ -40,7 +54,7 @@ export default function ExplorePage() {
           </svg>
         </button>
       </div>
-      <ExploreMap />
+      <ExploreMap searchTerm={searchTerm} />
     </div>
   )
 }
