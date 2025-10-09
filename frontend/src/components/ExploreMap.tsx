@@ -134,7 +134,7 @@ export default function ExploreMap() {
           center={currentLocation}
           zoom={13}
           style={{ height: '100vh', width: '100%' }}
-          zoomControl={true}
+          zoomControl={false}
           attributionControl={false}
           fadeAnimation={false}
           preferCanvas={true}
