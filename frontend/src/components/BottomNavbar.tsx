@@ -26,7 +26,7 @@ export default function BottomNavbar() {
     }`
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-foreground rounded-full mx-4 mb-4 p-2 flex justify-around items-center z-[100]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-foreground rounded-full mx-4 mb-4 p-2 flex justify-around items-center z-[1000]">
       <button className={buttonClass('home')} onClick={() => handleNavigation('/')}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
