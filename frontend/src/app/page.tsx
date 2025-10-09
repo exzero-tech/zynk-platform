@@ -5,10 +5,11 @@ import CarCard from '@/components/CarCard'
 import BatteryCard from '@/components/BatteryCard'
 import WeatherCard from '@/components/WeatherCard'
 import MapCard from '@/components/MapCard'
+import Last30DaysStats from '@/components/Last30DaysStats'
 
 export default function Home() {
   return (
-    <div className="p-4">
+    <div className="p-4 pb-28">
       <div className="flex justify-between items-start mb-4">
         <Profile />
         <div className="flex gap-2">
@@ -28,6 +29,7 @@ export default function Home() {
       <div className="mt-4">
         <MapCard />
       </div>
+      <Last30DaysStats />
     </div>
   );
 }
