@@ -5,7 +5,13 @@ import { useState, useMemo } from 'react'
 import ChargingStationBottomSheet from './ChargingStationBottomSheet'
 
 interface ExploreMapProps {
-  searchTerm: string
+  searchTerm?: string
+  filters?: {
+    availability: string
+    chargerType: string
+    chargerSpeed: string
+    maxDistance: number
+  }
 }
 
 // Fix for default markers in react-leaflet
@@ -25,7 +31,7 @@ const greyIcon = new L.Icon({
   shadowSize: [41, 41]
 })
 
-export default function ExploreMap({ searchTerm }: ExploreMapProps) {
+export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps) {
   const [selectedStation, setSelectedStation] = useState<any>(null)
 
   // University of Kelaniya coordinates (current location)
@@ -131,20 +137,51 @@ export default function ExploreMap({ searchTerm }: ExploreMapProps) {
     }
   ]
 
-  // Filter stations based on search term
+  // Filter stations based on search term and filters
   const chargingStations = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return allChargingStations
+    let filtered = allChargingStations
+
+    // Apply search filter
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase()
+      filtered = filtered.filter(station => 
+        station.name.toLowerCase().includes(term) ||
+        station.location.toLowerCase().includes(term) ||
+        station.host.toLowerCase().includes(term) ||
+        station.chargerType.toLowerCase().includes(term)
+      )
     }
-    
-    const term = searchTerm.toLowerCase()
-    return allChargingStations.filter(station => 
-      station.name.toLowerCase().includes(term) ||
-      station.location.toLowerCase().includes(term) ||
-      station.host.toLowerCase().includes(term) ||
-      station.chargerType.toLowerCase().includes(term)
-    )
-  }, [searchTerm])
+
+    // Apply availability filter
+    if (filters?.availability && filters.availability !== 'all') {
+      filtered = filtered.filter(station => {
+        if (filters.availability === 'available') return station.status === 'Available'
+        if (filters.availability === 'in-use') return station.status === 'In Use'
+        return true
+      })
+    }
+
+    // Apply charger speed filter
+    if (filters?.chargerSpeed && filters.chargerSpeed !== 'all') {
+      filtered = filtered.filter(station => {
+        const speed = parseInt(station.chargerSpeed.replace(' kW', ''))
+        if (filters.chargerSpeed === 'slow') return speed <= 50
+        if (filters.chargerSpeed === 'medium') return speed >= 51 && speed <= 150
+        if (filters.chargerSpeed === 'fast') return speed >= 151
+        return true
+      })
+    }
+
+    // Apply distance filter
+    if (filters?.maxDistance) {
+      filtered = filtered.filter(station => {
+        const distance = parseFloat(station.distance.replace(' km', ''))
+        return distance <= filters.maxDistance
+      })
+    }
+
+    return filtered
+  }, [searchTerm, filters])
 
   return (
     <>
