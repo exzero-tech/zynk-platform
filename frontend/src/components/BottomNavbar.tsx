@@ -9,7 +9,7 @@ export default function BottomNavbar() {
   const getActiveTab = () => {
     if (pathname === '/') return 'home'
     if (pathname === '/explore' || pathname.startsWith('/explore') || pathname === '/start-charging' || pathname === '/charging-session' || pathname === '/station') return 'explore'
-    if (pathname === '/saved') return 'saved'
+    if (pathname === '/charges' || pathname.startsWith('/charge-details')) return 'charges'
     if (pathname === '/profile') return 'profile'
     return 'home' // default
   }
@@ -42,11 +42,11 @@ export default function BottomNavbar() {
         </svg>
         <span className="text-xs mt-1">Explore</span>
       </button>
-      <button className={buttonClass('saved')} onClick={() => handleNavigation('/saved')}>
+      <button className={buttonClass('charges')} onClick={() => handleNavigation('/charges')}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
         </svg>
-        <span className="text-xs mt-1">Saved</span>
+        <span className="text-xs mt-1">Charges</span>
       </button>
       <button className={buttonClass('profile')} onClick={() => handleNavigation('/profile')}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
