@@ -51,7 +51,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '150 kW',
       chargingSpeed: 'ultra-fast',
       priceCategory: 'standard',
-      byocSupport: true
+      byocSupport: true,
+      amenities: {
+        restaurants: true,
+        malls: true,
+        movieTheaters: false,
+        parks: true,
+        washrooms: true,
+        cafes: true,
+        supermarkets: true,
+        parking: true,
+        wifi: true
+      }
     },
     { 
       position: [6.9700, 79.9100] as [number, number], 
@@ -65,7 +76,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '100 kW',
       chargingSpeed: 'rapid',
       priceCategory: 'standard',
-      byocSupport: false
+      byocSupport: false,
+      amenities: {
+        restaurants: true,
+        malls: false,
+        movieTheaters: false,
+        parks: false,
+        washrooms: true,
+        cafes: false,
+        supermarkets: false,
+        parking: true,
+        wifi: false
+      }
     },
     { 
       position: [6.9850, 79.9250] as [number, number], 
@@ -79,7 +101,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '22 kW',
       chargingSpeed: 'fast',
       priceCategory: 'budget',
-      byocSupport: true
+      byocSupport: true,
+      amenities: {
+        restaurants: false,
+        malls: false,
+        movieTheaters: false,
+        parks: true,
+        washrooms: true,
+        cafes: true,
+        supermarkets: false,
+        parking: true,
+        wifi: true
+      }
     },
     { 
       position: [6.9650, 79.9300] as [number, number], 
@@ -93,7 +126,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '125 kW',
       chargingSpeed: 'rapid',
       priceCategory: 'standard',
-      byocSupport: true
+      byocSupport: true,
+      amenities: {
+        restaurants: true,
+        malls: true,
+        movieTheaters: true,
+        parks: false,
+        washrooms: true,
+        cafes: true,
+        supermarkets: true,
+        parking: true,
+        wifi: true
+      }
     },
     { 
       position: [6.9900, 79.9150] as [number, number], 
@@ -107,7 +151,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '200 kW',
       chargingSpeed: 'ultra-fast',
       priceCategory: 'premium',
-      byocSupport: false
+      byocSupport: false,
+      amenities: {
+        restaurants: false,
+        malls: false,
+        movieTheaters: false,
+        parks: false,
+        washrooms: true,
+        cafes: false,
+        supermarkets: false,
+        parking: true,
+        wifi: false
+      }
     },
     { 
       position: [6.9600, 79.9200] as [number, number], 
@@ -121,7 +176,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '90 kW',
       chargingSpeed: 'rapid',
       priceCategory: 'standard',
-      byocSupport: true
+      byocSupport: true,
+      amenities: {
+        restaurants: true,
+        malls: false,
+        movieTheaters: false,
+        parks: true,
+        washrooms: true,
+        cafes: true,
+        supermarkets: true,
+        parking: true,
+        wifi: true
+      }
     },
     { 
       position: [6.9750, 79.9050] as [number, number], 
@@ -135,7 +201,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '7 kW',
       chargingSpeed: 'slow',
       priceCategory: 'budget',
-      byocSupport: true
+      byocSupport: true,
+      amenities: {
+        restaurants: false,
+        malls: false,
+        movieTheaters: false,
+        parks: false,
+        washrooms: true,
+        cafes: false,
+        supermarkets: false,
+        parking: true,
+        wifi: false
+      }
     },
     { 
       position: [6.9820, 79.9300] as [number, number], 
@@ -149,7 +226,18 @@ export default function ExploreMap({ searchTerm = '', filters }: ExploreMapProps
       chargerSpeed: '11 kW',
       chargingSpeed: 'fast',
       priceCategory: 'standard',
-      byocSupport: false
+      byocSupport: false,
+      amenities: {
+        restaurants: true,
+        malls: true,
+        movieTheaters: false,
+        parks: false,
+        washrooms: true,
+        cafes: true,
+        supermarkets: true,
+        parking: true,
+        wifi: true
+      }
     }
   ]
 

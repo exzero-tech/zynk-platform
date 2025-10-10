@@ -12,6 +12,17 @@ interface ChargingStation {
   chargerSpeed: string
   byocSupport: boolean
   distance: string
+  amenities: {
+    restaurants: boolean
+    malls: boolean
+    movieTheaters: boolean
+    parks: boolean
+    washrooms: boolean
+    cafes: boolean
+    supermarkets: boolean
+    parking: boolean
+    wifi: boolean
+  }
 }
 
 interface ChargingStationBottomSheetProps {
@@ -105,15 +116,50 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
           <span className="text-white/50 text-sm">• {station.distance}</span>
         </div>
 
-        {/* Quick Info */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-white/60 text-xs mb-1">Price per kWh</p>
+        {/* Key Charging Info */}
+        <div className="flex justify-between items-center mb-6 p-3 bg-white/5 rounded-lg">
+          <div className="text-center">
+            <p className="text-white/60 text-xs">Price per kWh</p>
             <p className="text-white font-semibold">{station.pricePerKwh}</p>
           </div>
-          <div className="bg-white/5 rounded-lg p-3">
-            <p className="text-white/60 text-xs mb-1">Charger Speed</p>
+          <div className="w-px h-8 bg-white/20"></div>
+          <div className="text-center">
+            <p className="text-white/60 text-xs">Charging Speed</p>
             <p className="text-white font-semibold">{station.chargerSpeed}</p>
+          </div>
+        </div>
+
+        {/* Amenities Preview */}
+        <div className="mb-6">
+          <p className="text-white/60 text-xs mb-3">Nearby Amenities</p>
+          <div className="flex flex-wrap gap-2">
+            {station.amenities.restaurants && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🍽️ Restaurants</span>
+            )}
+            {station.amenities.malls && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🛍️ Malls</span>
+            )}
+            {station.amenities.movieTheaters && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🎬 Movie Theaters</span>
+            )}
+            {station.amenities.parks && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🌳 Parks</span>
+            )}
+            {station.amenities.washrooms && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🚻 Washrooms</span>
+            )}
+            {station.amenities.cafes && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">☕ Cafes</span>
+            )}
+            {station.amenities.supermarkets && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🛒 Supermarkets</span>
+            )}
+            {station.amenities.parking && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">🅿️ Parking</span>
+            )}
+            {station.amenities.wifi && (
+              <span className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">📶 WiFi</span>
+            )}
           </div>
         </div>
 
@@ -142,7 +188,9 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
         {/* Expanded Details */}
         {isExpanded && (
           <div className="flex-1 space-y-4 overflow-y-auto">
+            {/* Station Details */}
             <div className="space-y-3">
+              <h3 className="text-white font-semibold text-lg mb-3">Station Details</h3>
               <div className="flex justify-between items-center py-2 border-b border-white/10">
                 <span className="text-white/70">Host</span>
                 <span className="text-white">{station.host}</span>
@@ -152,8 +200,104 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
                 <span className="text-white">{station.chargerType}</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-white/10">
+                <span className="text-white/70">Charger Speed</span>
+                <span className="text-white">{station.chargerSpeed}</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/10">
+                <span className="text-white/70">Price per kWh</span>
+                <span className="text-white">{station.pricePerKwh}</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/10">
                 <span className="text-white/70">BYOC Support</span>
                 <span className="text-white">{station.byocSupport ? 'Yes' : 'No'}</span>
+              </div>
+            </div>
+
+            {/* Amenities Details */}
+            <div className="space-y-3">
+              <h3 className="text-white font-semibold text-lg mb-3">Nearby Amenities</h3>
+              <div className="grid grid-cols-1 gap-3">
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🍽️</span>
+                    <span className="text-white">Restaurants</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.restaurants ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.restaurants ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🛍️</span>
+                    <span className="text-white">Shopping Malls</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.malls ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.malls ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🎬</span>
+                    <span className="text-white">Movie Theaters</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.movieTheaters ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.movieTheaters ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🌳</span>
+                    <span className="text-white">Parks & Recreation</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.parks ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.parks ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🚻</span>
+                    <span className="text-white">Washrooms</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.washrooms ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.washrooms ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">☕</span>
+                    <span className="text-white">Cafes & Coffee Shops</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.cafes ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.cafes ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🛒</span>
+                    <span className="text-white">Supermarkets</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.supermarkets ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.supermarkets ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🅿️</span>
+                    <span className="text-white">Parking Facilities</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.parking ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.parking ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">📶</span>
+                    <span className="text-white">WiFi Access</span>
+                  </div>
+                  <span className={`text-sm ${station.amenities.wifi ? 'text-green-400' : 'text-red-400'}`}>
+                    {station.amenities.wifi ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
               </div>
             </div>
 
