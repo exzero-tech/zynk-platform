@@ -31,7 +31,6 @@ export default function StartChargingPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [meterReading, setMeterReading] = useState('')
-  const [isStarting, setIsStarting] = useState(false)
 
   // Get station data from URL params (we'll pass it as JSON string)
   const stationData = searchParams.get('station')
@@ -43,15 +42,9 @@ export default function StartChargingPage() {
       return
     }
 
-    setIsStarting(true)
-
-    // Simulate API call
-    setTimeout(() => {
-      alert(`Charging started! Initial meter reading: ${meterReading} kWh`)
-      setIsStarting(false)
-      // Here you would typically redirect to a charging session page
-      router.back()
-    }, 2000)
+    // Navigate directly to charging session page with station data and initial reading
+    const stationData = encodeURIComponent(JSON.stringify(station))
+    router.push(`/charging-session?station=${stationData}&initialReading=${meterReading}`)
   }
 
   if (!station) {
@@ -161,17 +154,10 @@ export default function StartChargingPage() {
         {/* Start Charging Button */}
         <button
           onClick={handleStartCharging}
-          disabled={isStarting || !meterReading.trim()}
+          disabled={!meterReading.trim()}
           className="w-full bg-accent text-white py-4 rounded-2xl font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent/90 transition-colors"
         >
-          {isStarting ? (
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              Starting Charge...
-            </div>
-          ) : (
-            'Start Charging'
-          )}
+          Start Charging
         </button>
 
         {/* Safety Notice */}

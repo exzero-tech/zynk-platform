@@ -8,7 +8,7 @@ export default function BottomNavbar() {
 
   const getActiveTab = () => {
     if (pathname === '/') return 'home'
-    if (pathname === '/explore') return 'explore'
+    if (pathname === '/explore' || pathname.startsWith('/explore') || pathname === '/start-charging' || pathname === '/charging-session' || pathname === '/station') return 'explore'
     if (pathname === '/saved') return 'saved'
     if (pathname === '/profile') return 'profile'
     return 'home' // default

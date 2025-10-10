@@ -32,7 +32,6 @@ interface ChargingStationBottomSheetProps {
 }
 
 export default function ChargingStationBottomSheet({ station, onClose }: ChargingStationBottomSheetProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [startY, setStartY] = useState(0)
   const sheetRef = useRef<HTMLDivElement>(null)
@@ -61,19 +60,20 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
     router.push(`/start-charging?station=${stationData}`)
   }
 
+  const handleViewDetails = () => {
+    const stationData = encodeURIComponent(JSON.stringify(station))
+    router.push(`/station?station=${stationData}`)
+  }
+
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isDragging) return
 
     const endY = e.changedTouches[0].clientY
     const deltaY = startY - endY
 
-    // If dragged up by more than 50px and not expanded, expand
-    if (deltaY > 50 && !isExpanded) {
-      setIsExpanded(true)
-    }
-    // If dragged down by more than 50px and expanded, collapse
-    else if (deltaY < -50 && isExpanded) {
-      setIsExpanded(false)
+    // If dragged up by more than 50px, navigate to full details page
+    if (deltaY > 50) {
+      handleViewDetails()
     }
 
     setIsDragging(false)
@@ -82,11 +82,7 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
   return (
     <div
       ref={sheetRef}
-      className={`fixed left-0 right-0 z-[200] bg-foreground rounded-3xl shadow-2xl transition-all duration-300 ease-out overflow-hidden ${
-        isExpanded
-          ? 'top-0 bottom-24'
-          : 'bottom-28 h-80'
-      }`}
+      className="fixed left-0 right-0 z-[200] bg-foreground rounded-3xl shadow-2xl transition-all duration-300 ease-out bottom-28 h-80 overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -172,97 +168,39 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
 
         {/* Expand/Collapse Hint */}
         <div className="flex items-center justify-center gap-2 text-white/70 text-sm mb-6">
-          <span>{isExpanded ? 'Swipe down to collapse' : 'Swipe up for more details'}</span>
-          {!isExpanded && (
-            <button
-              onClick={() => setIsExpanded(true)}
-              className="flex items-center gap-2 hover:text-white transition-colors"
+          <span>Swipe up for full details</span>
+          <button
+            onClick={handleViewDetails}
+            className="flex items-center gap-2 hover:text-white transition-colors"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="6,9 12,15 18,9"/>
-              </svg>
-            </button>
-          )}
+              <polyline points="6,9 12,15 18,9"/>
+            </svg>
+          </button>
         </div>
 
-        {/* Expanded Details */}
-        {isExpanded && (
-          <div className="flex-1 space-y-4 overflow-y-auto">
-            {/* Station Details */}
-            <div className="space-y-3">
-              <h3 className="text-white font-semibold text-lg mb-3">Station Details</h3>
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
-                <span className="text-white/70">Host</span>
-                <span className="text-white">{station.host}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
-                <span className="text-white/70">Charger Type</span>
-                <span className="text-white">{station.chargerType}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
-                <span className="text-white/70">Charger Speed</span>
-                <span className="text-white">{station.chargerSpeed}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
-                <span className="text-white/70">Price per kWh</span>
-                <span className="text-white">{station.pricePerKwh}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-white/10">
-                <span className="text-white/70">BYOC Support</span>
-                <span className="text-white">{station.byocSupport ? 'Yes' : 'No'}</span>
-              </div>
-            </div>
-
-            {/* Amenities Details */}
-            <div className="space-y-3">
-              <h3 className="text-white font-semibold text-lg mb-3">Nearby Amenities</h3>
-              <div className="grid grid-cols-1 gap-3">
-                {[
-                  { key: 'restaurants', emoji: '🍽️', label: 'Restaurants', available: station.amenities.restaurants },
-                  { key: 'malls', emoji: '🛍️', label: 'Shopping Malls', available: station.amenities.malls },
-                  { key: 'movieTheaters', emoji: '🎬', label: 'Movie Theaters', available: station.amenities.movieTheaters },
-                  { key: 'parks', emoji: '🌳', label: 'Parks & Recreation', available: station.amenities.parks },
-                  { key: 'washrooms', emoji: '🚻', label: 'Washrooms', available: station.amenities.washrooms },
-                  { key: 'cafes', emoji: '☕', label: 'Cafes & Coffee Shops', available: station.amenities.cafes },
-                  { key: 'supermarkets', emoji: '🛒', label: 'Supermarkets', available: station.amenities.supermarkets },
-                  { key: 'parking', emoji: '🅿️', label: 'Parking Facilities', available: station.amenities.parking },
-                  { key: 'wifi', emoji: '📶', label: 'WiFi Access', available: station.amenities.wifi }
-                ].filter(amenity => amenity.available).map((amenity, index, array) => (
-                  <div key={amenity.key} className={`flex items-center justify-between py-2 ${index < array.length - 1 ? 'border-b border-white/10' : ''}`}>
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{amenity.emoji}</span>
-                      <span className="text-white">{amenity.label}</span>
-                    </div>
-                    <span className="text-sm text-green-400">Available</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-3 pt-4">
-              <button
-                onClick={handleStartCharging}
-                className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent/90 transition-colors"
-              >
-                Start Charging
-              </button>
-              <button className="w-full bg-white/10 text-white py-3 rounded-lg hover:bg-white/20 transition-colors">
-                Add to Favorites
-              </button>
-              <button className="w-full bg-white/10 text-white py-3 rounded-lg hover:bg-white/20 transition-colors">
-                Get Directions
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Action Buttons */}
+        <div className="space-y-3">
+          <button
+            onClick={handleStartCharging}
+            className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent/90 transition-colors"
+          >
+            Start Charging
+          </button>
+          <button className="w-full bg-white/10 text-white py-3 rounded-lg hover:bg-white/20 transition-colors">
+            Add to Favorites
+          </button>
+          <button className="w-full bg-white/10 text-white py-3 rounded-lg hover:bg-white/20 transition-colors">
+            Get Directions
+          </button>
+        </div>
       </div>
     </div>
   )
