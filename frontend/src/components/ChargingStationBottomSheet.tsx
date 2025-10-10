@@ -63,7 +63,9 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
   const handleGetDirections = () => {
     // Open Google Maps with the station location
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(station.location)}`
-    window.open(mapsUrl, '_blank')
+    if (typeof window !== 'undefined') {
+      window.open(mapsUrl, '_blank')
+    }
   }
 
   const handleViewDetails = () => {
