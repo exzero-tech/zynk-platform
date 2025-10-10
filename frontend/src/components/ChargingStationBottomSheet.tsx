@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface ChargingStation {
   name: string
@@ -35,6 +36,7 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
   const [isDragging, setIsDragging] = useState(false)
   const [startY, setStartY] = useState(0)
   const sheetRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -52,6 +54,11 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return
     // Removed preventDefault to avoid passive event listener error
+  }
+
+  const handleStartCharging = () => {
+    const stationData = encodeURIComponent(JSON.stringify(station))
+    router.push(`/start-charging?station=${stationData}`)
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -217,93 +224,34 @@ export default function ChargingStationBottomSheet({ station, onClose }: Chargin
             <div className="space-y-3">
               <h3 className="text-white font-semibold text-lg mb-3">Nearby Amenities</h3>
               <div className="grid grid-cols-1 gap-3">
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🍽️</span>
-                    <span className="text-white">Restaurants</span>
+                {[
+                  { key: 'restaurants', emoji: '🍽️', label: 'Restaurants', available: station.amenities.restaurants },
+                  { key: 'malls', emoji: '🛍️', label: 'Shopping Malls', available: station.amenities.malls },
+                  { key: 'movieTheaters', emoji: '🎬', label: 'Movie Theaters', available: station.amenities.movieTheaters },
+                  { key: 'parks', emoji: '🌳', label: 'Parks & Recreation', available: station.amenities.parks },
+                  { key: 'washrooms', emoji: '🚻', label: 'Washrooms', available: station.amenities.washrooms },
+                  { key: 'cafes', emoji: '☕', label: 'Cafes & Coffee Shops', available: station.amenities.cafes },
+                  { key: 'supermarkets', emoji: '🛒', label: 'Supermarkets', available: station.amenities.supermarkets },
+                  { key: 'parking', emoji: '🅿️', label: 'Parking Facilities', available: station.amenities.parking },
+                  { key: 'wifi', emoji: '📶', label: 'WiFi Access', available: station.amenities.wifi }
+                ].filter(amenity => amenity.available).map((amenity, index, array) => (
+                  <div key={amenity.key} className={`flex items-center justify-between py-2 ${index < array.length - 1 ? 'border-b border-white/10' : ''}`}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{amenity.emoji}</span>
+                      <span className="text-white">{amenity.label}</span>
+                    </div>
+                    <span className="text-sm text-green-400">Available</span>
                   </div>
-                  <span className={`text-sm ${station.amenities.restaurants ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.restaurants ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🛍️</span>
-                    <span className="text-white">Shopping Malls</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.malls ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.malls ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🎬</span>
-                    <span className="text-white">Movie Theaters</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.movieTheaters ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.movieTheaters ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🌳</span>
-                    <span className="text-white">Parks & Recreation</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.parks ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.parks ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🚻</span>
-                    <span className="text-white">Washrooms</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.washrooms ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.washrooms ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">☕</span>
-                    <span className="text-white">Cafes & Coffee Shops</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.cafes ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.cafes ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🛒</span>
-                    <span className="text-white">Supermarkets</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.supermarkets ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.supermarkets ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🅿️</span>
-                    <span className="text-white">Parking Facilities</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.parking ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.parking ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">📶</span>
-                    <span className="text-white">WiFi Access</span>
-                  </div>
-                  <span className={`text-sm ${station.amenities.wifi ? 'text-green-400' : 'text-red-400'}`}>
-                    {station.amenities.wifi ? 'Available' : 'Not Available'}
-                  </span>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="space-y-3 pt-4">
-              <button className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent/90 transition-colors">
+              <button
+                onClick={handleStartCharging}
+                className="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent/90 transition-colors"
+              >
                 Start Charging
               </button>
               <button className="w-full bg-white/10 text-white py-3 rounded-lg hover:bg-white/20 transition-colors">
