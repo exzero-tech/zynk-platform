@@ -128,7 +128,7 @@ export default function ChargingSessionPage() {
   return (
     <div className="min-h-screen bg-background pb-28">
       {/* Header */}
-      <div className="bg-foreground p-6">
+      <div className="bg-black p-6">
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}

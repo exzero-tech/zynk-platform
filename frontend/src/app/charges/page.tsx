@@ -103,8 +103,39 @@ export default function ChargesPage() {
   }
 
   const handleSessionClick = (session: ChargingSession) => {
-    const sessionData = encodeURIComponent(JSON.stringify(session))
-    router.push(`/charge-details?session=${sessionData}`)
+    if (session.status === 'active') {
+      // For active sessions, redirect to charging session page
+      // Create a mock station object for the charging session
+      const mockStation = {
+        name: session.stationName,
+        location: session.location,
+        status: 'Available',
+        pricePerKwh: 'LKR 33.33/kWh',
+        host: 'Zynk Network',
+        chargerType: 'DC Fast Charger',
+        chargerSpeed: '50 kW',
+        byocSupport: true,
+        distance: '0.1 km',
+        connectorType: 'CCS',
+        amenities: {
+          restaurants: true,
+          malls: false,
+          movieTheaters: false,
+          parks: true,
+          washrooms: true,
+          cafes: true,
+          supermarkets: false,
+          parking: true,
+          wifi: true
+        }
+      }
+      const stationData = encodeURIComponent(JSON.stringify(mockStation))
+      router.push(`/charging-session?station=${stationData}&initialReading=0`)
+    } else {
+      // For completed/cancelled sessions, show charge details
+      const sessionData = encodeURIComponent(JSON.stringify(session))
+      router.push(`/charge-details?session=${sessionData}`)
+    }
   }
 
   const SessionCard = ({ session }: { session: ChargingSession }) => (
